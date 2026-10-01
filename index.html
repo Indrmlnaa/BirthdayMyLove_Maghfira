@@ -4,158 +4,840 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Maghfira Syifatiana Ruhenda ❤️</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti CDN -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&family=Sacramento&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Sacramento&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#090d16',
+                        glass: 'rgba(17, 24, 39, 0.75)',
+                        gold: {
+                            300: '#fef08a',
+                            400: '#facc15',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        cursive: ['Sacramento', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    
     <style>
+        /* Custom Styling & Glassmorphism */
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #0b0f19;
+            background-color: #090d16;
             color: #f3f4f6;
             overflow-x: hidden;
         }
-        .font-serif-custom { font-family: 'Playfair Display', serif; }
-        .font-cursive { font-family: 'Sacramento', cursive; }
+
         .glass-card {
-            background: rgba(17, 24, 39, 0.75);
-            backdrop-filter: blur(12px);
+            background: rgba(17, 24, 39, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5);
         }
+
         .gold-gradient-text {
-            background: linear-gradient(135deg, #fef08a 0%, #f59e0b 50%, #d97706 100%);
+            background: linear-gradient(135deg, #fef08a 0%, #f59e0b 50%, #b45309 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
+        /* Ambient Glow & Floating Particles Background */
+        .bg-glow {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.12) 0%, rgba(9, 13, 22, 0) 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating Particles Canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* 3D Candle Flames */
         .flame {
-            background: radial-gradient(ellipse at bottom, #fef08a 0%, #f59e0b 60%, rgba(239,68,68,0) 100%);
+            background: radial-gradient(ellipse at bottom, #fef08a 0%, #f59e0b 50%, rgba(239,68,68,0) 100%);
             border-radius: 50% 50% 20% 20%;
             box-shadow: 0 0 15px #f59e0b, 0 0 30px #ef4444;
-            animation: flicker 0.1s infinite alternate;
+            animation: flicker 0.12s infinite alternate ease-in-out;
+            transform-origin: center bottom;
         }
+
         @keyframes flicker {
-            0% { transform: scale(1) rotate(-1deg); opacity: 0.9; }
-            100% { transform: scale(1.08) rotate(1deg); opacity: 1; }
+            0% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
+            100% { transform: scale(1.1) rotate(2deg); opacity: 1; }
         }
-        .polaroid {
+
+        /* Smoke Particle Animation */
+        .smoke {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(200, 200, 200, 0.6);
+            border-radius: 50%;
+            animation: rise 1.5s forwards ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes rise {
+            0% { opacity: 0.8; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-40px) scale(3); filter: blur(4px); }
+        }
+
+        /* Polaroid Cards 3D Hover Tilt */
+        .polaroid-card {
             background: #ffffff;
-            padding: 10px 10px 20px 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
+            padding: 12px 12px 28px 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
         }
-        .polaroid:hover {
-            transform: scale(1.05) rotate(0deg) !important;
-            z-index: 10;
+
+        .polaroid-card:hover {
+            transform: translateY(-8px) scale(1.03) rotate(0deg) !important;
+            box-shadow: 0 20px 45px rgba(245, 158, 11, 0.25);
+            z-index: 20;
+        }
+
+        /* 3D Interactive Envelope */
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+        
+        .envelope {
+            position: relative;
+            background-color: #1f2937;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            transition: all 0.5s ease;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 110px solid #374151;
+            transform-origin: top center;
+            transition: transform 0.6s ease, z-index 0.2s;
+            z-index: 5;
+        }
+
+        @media (min-width: 768px) {
+            .envelope-flap {
+                border-left-width: 220px;
+                border-right-width: 220px;
+                border-top-width: 140px;
+            }
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        /* Smooth Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f59e0b;
         }
     </style>
 </head>
-<body class="min-h-screen relative pb-20">
+<body class="relative min-h-screen text-gray-100 font-sans selection:bg-amber-500 selection:text-gray-900">
 
-    <!-- Header Navbar -->
-    <nav class="fixed top-0 left-0 right-0 z-50 p-4 flex justify-between items-center bg-gray-900/80 backdrop-blur-md border-b border-gray-800">
-        <div class="font-serif-custom font-bold text-amber-300 text-lg">MSR ❤️</div>
-        <div class="text-xs text-gray-400">02 Oktober 2001</div>
+    <!-- Background Ambient Glows -->
+    <div class="bg-glow top-0 -left-20"></div>
+    <div class="bg-glow bottom-20 -right-20"></div>
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Navbar / Header Controls -->
+    <nav class="fixed top-0 left-0 right-0 z-40 px-4 py-3 bg-gray-950/75 backdrop-blur-xl border-b border-gray-800/80 flex justify-between items-center transition-all">
+        <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+            <span class="font-serif font-bold text-amber-300 text-lg tracking-wide">MSR ❤️</span>
+        </div>
+        
+        <div class="flex items-center gap-2">
+            <!-- Music BGM Toggle -->
+            <button id="bgm-btn" onclick="toggleBGM()" class="p-2 rounded-full bg-gray-800/80 hover:bg-amber-500/20 text-amber-300 border border-gray-700/80 transition flex items-center justify-center gap-1.5 px-3 text-xs font-semibold">
+                <span id="bgm-icon">🎵</span>
+                <span id="bgm-text" class="hidden sm:inline">Putar Musik</span>
+            </button>
+            
+            <!-- Live Editor Toggle Button -->
+            <button onclick="openPasswordModal()" class="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-amber-600/30 text-amber-300 border border-amber-500/40 hover:border-amber-400 text-xs font-semibold transition shadow-lg shadow-amber-500/10 flex items-center gap-1.5">
+                🔒 <span>Edit & Upload</span>
+            </button>
+        </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="pt-28 pb-10 px-4 text-center max-w-3xl mx-auto">
-        <span class="px-3 py-1 text-xs rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 inline-block mb-4">
-            Special Birthday Wish ✨
-        </span>
-        <h1 class="text-4xl md:text-6xl font-serif-custom font-bold gold-gradient-text mb-3 leading-tight">
-            Selamat Ulang Tahun, Maghfira! ❤️
-        </h1>
-        <p class="text-gray-400 text-base md:text-lg max-w-xl mx-auto">
-            Maghfira Syifatiana Ruhenda — Sosok terindah yang selalu menyinari hari-hariku.
-        </p>
-    </section>
+    <main class="relative z-10 max-w-5xl mx-auto px-4 pt-24 pb-20 space-y-20">
 
-    <!-- Interactive Birthday Cake -->
-    <section class="py-6 px-4 flex flex-col items-center justify-center">
-        <div class="glass-card p-8 rounded-3xl text-center max-w-sm w-full relative">
-            <h3 class="text-xs font-medium text-amber-200/80 mb-6">Klik Lilin untuk Meniupnya ✨</h3>
+        <!-- Hero Section -->
+        <section class="text-center pt-8 md:pt-12 space-y-4">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-medium tracking-wider uppercase mb-2">
+                <span>✨ Hari Spesial • 02 Oktober 2001 ✨</span>
+            </div>
             
-            <div class="relative w-40 h-36 mx-auto flex flex-col items-center justify-end mb-4 cursor-pointer" onclick="toggleCandle()">
-                <div id="candle-flame" class="flame w-5 h-8 mb-1 cursor-pointer transition-all duration-300"></div>
-                <div class="w-4 h-16 bg-gradient-to-b from-amber-100 to-amber-300 rounded-t-sm shadow-inner"></div>
-                <div class="w-36 h-14 bg-gradient-to-r from-amber-900 via-yellow-950 to-amber-900 border border-amber-700/40 rounded-t-2xl relative shadow-lg flex items-center justify-center">
-                    <div class="text-amber-200 text-xs font-serif-custom">Special Day</div>
+            <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif font-bold gold-gradient-text tracking-tight leading-tight" id="disp-title">
+                Selamat Ulang Tahun, Maghfira! ❤️
+            </h1>
+            
+            <p class="text-gray-300 text-base sm:text-xl max-w-2xl mx-auto font-light leading-relaxed" id="disp-subtitle">
+                Maghfira Syifatiana Ruhenda — Sosok terindah yang menyinari hariku sejak awal kita bertemu.
+            </p>
+        </section>
+
+        <!-- Interactive Multi-Tier Cake -->
+        <section class="flex flex-col items-center justify-center">
+            <div class="glass-card p-8 rounded-3xl text-center max-w-md w-full relative overflow-hidden group">
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl"></div>
+                
+                <h3 class="text-xs uppercase tracking-widest text-amber-300/90 font-semibold mb-8">
+                    ✨ Minta Permintaan & Tiup Lilinnya ✨
+                </h3>
+                
+                <!-- Cake & Candle Assembly -->
+                <div class="relative w-56 h-48 mx-auto flex flex-col items-center justify-end mb-6 cursor-pointer select-none" onclick="blowOutCandles()">
+                    
+                    <!-- 3 Candle Flames Row -->
+                    <div class="flex gap-8 mb-1 z-20" id="candles-container">
+                        <!-- Candle 1 -->
+                        <div class="relative flex flex-col items-center">
+                            <div class="candle-flame flame w-4 h-7 mb-0.5"></div>
+                            <div class="w-3 h-10 bg-gradient-to-b from-amber-100 to-amber-300 rounded-t-sm shadow-md"></div>
+                        </div>
+                        <!-- Candle 2 (Center) -->
+                        <div class="relative flex flex-col items-center -translate-y-2">
+                            <div class="candle-flame flame w-4.5 h-8 mb-0.5"></div>
+                            <div class="w-3.5 h-12 bg-gradient-to-b from-amber-100 to-amber-300 rounded-t-sm shadow-md"></div>
+                        </div>
+                        <!-- Candle 3 -->
+                        <div class="relative flex flex-col items-center">
+                            <div class="candle-flame flame w-4 h-7 mb-0.5"></div>
+                            <div class="w-3 h-10 bg-gradient-to-b from-amber-100 to-amber-300 rounded-t-sm shadow-md"></div>
+                        </div>
+                    </div>
+
+                    <!-- Top Cake Tier -->
+                    <div class="w-36 h-12 bg-gradient-to-r from-amber-900 via-yellow-950 to-amber-900 border border-amber-700/50 rounded-t-xl relative z-10 shadow-lg flex items-center justify-center">
+                        <div class="w-full h-2 bg-amber-500/30 absolute top-2 rounded-full"></div>
+                        <span class="text-[10px] tracking-widest font-serif text-amber-200">25th Special</span>
+                    </div>
+
+                    <!-- Bottom Cake Tier -->
+                    <div class="w-48 h-16 bg-gradient-to-r from-amber-950 via-gray-900 to-amber-950 border border-amber-800/60 rounded-t-2xl relative z-0 shadow-2xl flex items-center justify-center">
+                        <div class="w-full h-3 bg-amber-600/20 absolute top-3 rounded-full"></div>
+                        <span class="text-xs font-serif italic text-amber-400">Maghfira S. R.</span>
+                    </div>
+                    
+                    <!-- Cake Plate -->
+                    <div class="w-56 h-3 bg-gradient-to-r from-gray-700 via-gray-400 to-gray-700 rounded-full shadow-2xl"></div>
+                </div>
+
+                <p id="cake-status" class="text-xs text-amber-200/90 italic font-light animate-pulse">
+                    Klik kue / lilin di atas untuk meniup lilinnya! 🎂
+                </p>
+            </div>
+        </section>
+
+        <!-- Expanded Masonry Photo Gallery -->
+        <section class="space-y-8">
+            <div class="text-center space-y-2">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold gold-gradient-text">
+                    Galeri Kenangan Terindah Kita 📸
+                </h2>
+                <p class="text-gray-400 text-xs sm:text-sm max-w-lg mx-auto">
+                    Kumpulan momen manis bersama Maghfira. Klik foto mana saja untuk memperbesar!
+                </p>
+                
+                <!-- Filter Tabs -->
+                <div class="flex flex-wrap justify-center gap-2 pt-4" id="gallery-filters">
+                    <button onclick="filterGallery('all')" class="filter-btn active px-4 py-1.5 rounded-full text-xs font-semibold bg-amber-500 text-gray-950 transition">Semua</button>
+                    <button onclick="filterGallery('sweet')" class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-gray-800 text-gray-300 hover:bg-gray-700 transition">Momen Manis</button>
+                    <button onclick="filterGallery('trip')" class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-gray-800 text-gray-300 hover:bg-gray-700 transition">Jalan-Jalan</button>
+                    <button onclick="filterGallery('fav')" class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-gray-800 text-gray-300 hover:bg-gray-700 transition">Favorit</button>
                 </div>
             </div>
 
-            <p id="cake-status" class="text-xs text-amber-300/80 italic">Klik lilin di atas untuk meniupnya!</p>
-        </div>
-    </section>
-
-    <!-- Galeri Foto Polaroid -->
-    <section class="py-12 px-4 max-w-4xl mx-auto">
-        <h2 class="text-2xl md:text-3xl font-serif-custom font-bold text-center gold-gradient-text mb-2">Galeri Kenangan Kita 📸</h2>
-        <p class="text-center text-gray-400 text-xs mb-8">Momen-momen manis yang tak terlupakan</p>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="photo-gallery">
-            <div class="polaroid transform -rotate-2 rounded">
-                <img src="foto1.jpg" class="w-full h-48 object-cover rounded-sm mb-2" alt="Momen 1" onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500'">
-                <p class="text-center text-gray-800 font-cursive text-xl">Senyum Indahmu ✨</p>
+            <!-- Polaroid Grid (8 Photo Slots) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-4" id="photo-gallery">
+                <!-- Dynamically Rendered via JS -->
             </div>
-            <div class="polaroid transform rotate-3 rounded">
-                <img src="foto2.jpg" class="w-full h-48 object-cover rounded-sm mb-2" alt="Momen 2" onerror="this.src='https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=500'">
-                <p class="text-center text-gray-800 font-cursive text-xl">Momen Bersama ❤️</p>
-            </div>
-            <div class="polaroid transform -rotate-1 rounded">
-                <img src="foto3.jpg" class="w-full h-48 object-cover rounded-sm mb-2" alt="Momen 3" onerror="this.src='https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=500'">
-                <p class="text-center text-gray-800 font-cursive text-xl">Bahagia Selalu ✨</p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Timeline Pertemuan -->
-    <section class="py-10 px-4 max-w-2xl mx-auto">
-        <h2 class="text-2xl font-serif-custom font-bold text-center gold-gradient-text mb-8">Awal Kisah Kita ☕</h2>
-        
-        <div class="glass-card p-6 rounded-2xl relative border-l-4 border-amber-500">
-            <div class="text-xs text-amber-400 font-semibold uppercase tracking-wider mb-1">Tahun 2025</div>
-            <h3 class="text-lg font-bold text-gray-100 mb-2">Pertemuan Pertama di Prolog Kopi</h3>
-            <p class="text-sm text-gray-300 leading-relaxed">
-                Hari pertama kali kita ketemu di Prolog Kopi tahun 2025. Berawal dari obrolan santai dan kopi, tidak pernah menyangka kamu akan menjadi sosok paling berharga dalam hidupku.
-            </p>
-        </div>
-    </section>
+        <!-- Love Story Timeline Section -->
+        <section class="space-y-8 max-w-3xl mx-auto">
+            <div class="text-center space-y-2">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold gold-gradient-text">
+                    Garis Waktu Perjalanan Cinta Kita ☕
+                </h2>
+                <p class="text-gray-400 text-xs sm:text-sm">Jejak langkah indah yang telah kita lewati bersama.</p>
+            </div>
 
-    <!-- Surat Cinta Rahasia -->
-    <section class="py-10 px-4 max-w-2xl mx-auto text-center">
-        <div class="glass-card p-8 rounded-3xl border border-amber-500/20">
-            <div class="text-3xl mb-3">💌</div>
-            <h2 class="text-2xl font-serif-custom font-bold text-amber-300 mb-4">Surat Spesial Untukmu</h2>
-            <p class="text-gray-300 text-sm leading-relaxed whitespace-pre-line text-left bg-gray-900/60 p-6 rounded-xl border border-gray-800 font-serif-custom italic">
+            <div class="relative border-l-2 border-amber-500/40 ml-4 md:ml-32 space-y-8 pl-6 md:pl-8">
+                
+                <!-- Item 1: Prolog Kopi 2025 -->
+                <div class="relative group">
+                    <div class="absolute -left-[31px] md:-left-[39px] top-1.5 w-6 h-6 rounded-full bg-amber-500 border-4 border-gray-950 shadow-lg group-hover:scale-125 transition"></div>
+                    <div class="glass-card p-6 rounded-2xl hover:border-amber-500/50 transition">
+                        <span class="text-[11px] font-bold tracking-widest text-amber-400 uppercase">Awal Pertemuan • 2025</span>
+                        <h3 class="text-lg font-bold text-gray-100 mt-1 mb-2 flex items-center gap-2">
+                            <span>☕ Prolog Kopi</span>
+                        </h3>
+                        <p class="text-gray-300 text-xs sm:text-sm leading-relaxed" id="disp-story-1">
+                            Tempat di mana segalanya bermula. Dari secangkir kopi dan obrolan sederhana, tidak pernah menyangka kamu akan menjadi sosok paling berharga dalam hidupku.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Item 2: First Date & Deep Talks -->
+                <div class="relative group">
+                    <div class="absolute -left-[31px] md:-left-[39px] top-1.5 w-6 h-6 rounded-full bg-amber-400 border-4 border-gray-950 shadow-lg group-hover:scale-125 transition"></div>
+                    <div class="glass-card p-6 rounded-2xl hover:border-amber-500/50 transition">
+                        <span class="text-[11px] font-bold tracking-widest text-amber-400 uppercase">Momen Manis</span>
+                        <h3 class="text-lg font-bold text-gray-100 mt-1 mb-2 flex items-center gap-2">
+                            <span>✨ Kencan & Obrolan Panjang</span>
+                        </h3>
+                        <p class="text-gray-300 text-xs sm:text-sm leading-relaxed" id="disp-story-2">
+                            Setiap tawa, tatapan mata, dan obrolan hingga larut malam yang selalu berhasil membuat hariku jauh lebih tenang dan penuh arti.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Item 3: Celebrating Birthday Today -->
+                <div class="relative group">
+                    <div class="absolute -left-[31px] md:-left-[39px] top-1.5 w-6 h-6 rounded-full bg-amber-300 border-4 border-gray-950 shadow-lg group-hover:scale-125 transition"></div>
+                    <div class="glass-card p-6 rounded-2xl hover:border-amber-500/50 transition">
+                        <span class="text-[11px] font-bold tracking-widest text-amber-400 uppercase">Hari Ini • 02 Oktober</span>
+                        <h3 class="text-lg font-bold text-amber-300 mt-1 mb-2 flex items-center gap-2">
+                            <span>🎉 Merayakan Ulang Tahun Maghfira</span>
+                        </h3>
+                        <p class="text-gray-300 text-xs sm:text-sm leading-relaxed" id="disp-story-3">
+                            Hari istimewa untuk merayakan hadirnya sosok luar biasa di dunia ini. Semoga kebahagiaan selalu menyertai setiap langkahmu.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Interactive 3D Love Letter Envelope -->
+        <section class="max-w-2xl mx-auto space-y-6 text-center">
+            <h2 class="text-3xl font-serif font-bold gold-gradient-text">
+                Surat Rahasia Untuk Maghfira 💌
+            </h2>
+            <p class="text-gray-400 text-xs">Klik amplop di bawah ini untuk membuka pesan spesial.</p>
+
+            <div class="envelope-wrapper py-6">
+                <div id="envelope" class="envelope max-w-sm sm:max-w-md mx-auto p-6 cursor-pointer border border-amber-500/30" onclick="toggleEnvelope()">
+                    <div class="envelope-flap"></div>
+                    
+                    <!-- Wax Seal Badge -->
+                    <div id="wax-seal" class="w-12 h-12 bg-amber-600 rounded-full border-2 border-amber-300 shadow-xl mx-auto flex items-center justify-center text-amber-100 font-serif font-bold text-lg relative z-20 my-8 transition-transform group-hover:scale-110">
+                        M
+                    </div>
+
+                    <!-- Letter Content inside Envelope -->
+                    <div id="letter-content" class="hidden transition-all duration-700 bg-gray-900/95 p-6 rounded-xl border border-amber-500/40 text-left space-y-4 shadow-2xl relative z-30 my-4">
+                        <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                            <span class="font-serif italic text-amber-300 text-sm">Special Letter for You</span>
+                            <span class="text-[10px] text-gray-500">02.10.2001</span>
+                        </div>
+                        
+                        <p class="text-gray-200 text-xs sm:text-sm font-serif italic leading-relaxed whitespace-pre-line" id="disp-letter">
 Untuk Maghfira Syifatiana Ruhenda,
 
-Selamat ulang tahun ya sayang. Terima kasih sudah hadir dan menjadi alasan tersenyumku setiap hari. Sejak pertama kali bertemu kamu di Prolog Kopi tahun 2025 lalu, hidupku terasa jauh lebih indah dan berwarna.
+Selamat ulang tahun ya sayang! Terima kasih sudah hadir dan menjadi alasan tersenyumku setiap hari. Sejak pertama kali bertemu kamu di Prolog Kopi tahun 2025 lalu, hidupku terasa jauh lebih berwarna dan penuh makna.
 
 Semoga di usiamu yang baru ini, kamu selalu diberikan kebahagiaan, kesehatan, kemudahan rezeki, dan kelancaran dalam meraih semua impianmu. Aku akan selalu ada di sampingmu untuk mendukungmu.
 
-With all my love ❤
-            </p>
+With all my love ❤️
+                        </p>
+
+                        <div class="text-right pt-2 border-t border-gray-800">
+                            <span class="font-cursive text-2xl text-amber-300">Selamanya Mencintaimu ✨</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive "100 Reasons Why I Love You" Slot Generator -->
+        <section class="glass-card p-8 rounded-3xl max-w-2xl mx-auto text-center space-y-6 border border-amber-500/20">
+            <div class="space-y-1">
+                <span class="text-2xl">💖</span>
+                <h3 class="text-2xl font-serif font-bold gold-gradient-text">
+                    Alasan Kenapa Kamu Sangat Spesial
+                </h3>
+                <p class="text-gray-400 text-xs">Klik tombol di bawah untuk melihat pesan acak manis lainnya!</p>
+            </div>
+
+            <div class="min-h-[100px] flex items-center justify-center p-6 bg-gray-950/70 rounded-2xl border border-gray-800/80">
+                <p id="reason-text" class="text-amber-200 font-serif italic text-sm sm:text-base transition-all duration-300">
+                    "Senyumanmu selalu berhasil membuat hari yang berat terasa jauh lebih ringan." ✨
+                </p>
+            </div>
+
+            <button onclick="generateRandomReason()" class="px-6 py-2.5 rounded-full bg-amber-500 text-gray-950 font-bold text-xs hover:bg-amber-400 transition shadow-lg shadow-amber-500/20 active:scale-95">
+                🎲 Klik Untuk Alasan Lainnya
+            </button>
+        </section>
+
+    </main>
+
+    <!-- LIGHTBOX MODAL (FULLSCREEN PHOTO PREVIEW) -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4" onclick="closeLightbox()">
+        <div class="relative max-w-3xl w-full text-center" onclick="event.stopPropagation()">
+            <button onclick="closeLightbox()" class="absolute -top-10 right-0 text-white text-2xl hover:text-amber-400">✕</button>
+            <img id="lightbox-img" src="" class="max-h-[75vh] mx-auto rounded-lg shadow-2xl border border-gray-800" alt="Preview">
+            <p id="lightbox-caption" class="text-amber-300 font-cursive text-2xl mt-4"></p>
         </div>
-    </section>
+    </div>
+
+    <!-- PIN SECURITY MODAL -->
+    <div id="pwd-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card p-6 rounded-2xl max-w-xs w-full text-center space-y-4 border border-amber-500/30">
+            <div class="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 flex items-center justify-center text-xl mx-auto">
+                🔑
+            </div>
+            <div>
+                <h3 class="text-base font-bold text-amber-300">Masukan PIN Rahasia</h3>
+                <p class="text-gray-400 text-[11px] mt-1">Masukkan PIN untuk membuka Panel Editor & Upload Foto.</p>
+            </div>
+            <input type="password" id="pwd-input" placeholder="Masukkan PIN" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-xl text-center text-amber-300 text-sm focus:outline-none focus:border-amber-500">
+            <div class="flex gap-2">
+                <button onclick="closePasswordModal()" class="w-1/2 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs rounded-xl transition">Batal</button>
+                <button onclick="checkPassword()" class="w-1/2 py-2 bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold text-xs rounded-xl transition">Buka Panel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIVE EDITOR & MULTI-PHOTO UPLOAD MODAL -->
+    <div id="editor-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-card p-6 sm:p-8 rounded-3xl max-w-2xl w-full my-8 space-y-6 border border-amber-500/30 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+                <h3 class="text-lg font-bold text-amber-300 flex items-center gap-2">
+                    <span>🛠️ Panel Live Editor & Unggah Foto</span>
+                </h3>
+                <button onclick="closeEditor()" class="text-gray-400 hover:text-white">✕</button>
+            </div>
+
+            <!-- Multi Photo Uploader Section -->
+            <div class="p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl space-y-3">
+                <label class="block text-amber-300 font-bold text-xs">📸 Unggah Foto Galeri (Hingga 8 Foto)</label>
+                <p class="text-gray-400 text-[11px]">Pilih beberapa foto dari galeri HP/Laptop. Foto akan langsung menggantikan gambar di galeri!</p>
+                <input type="file" id="multi-file-input" multiple accept="image/*" class="w-full text-xs text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-gray-950 hover:file:bg-amber-400 cursor-pointer">
+            </div>
+
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block text-gray-400 mb-1">Judul Utama Hero</label>
+                    <input type="text" id="edit-title" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-xl text-gray-200">
+                </div>
+                <div>
+                    <label class="block text-gray-400 mb-1">Sub-Judul</label>
+                    <input type="text" id="edit-subtitle" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-xl text-gray-200">
+                </div>
+                <div>
+                    <label class="block text-gray-400 mb-1">Kisah Timeline 1 (Prolog Kopi)</label>
+                    <textarea id="edit-story-1" rows="2" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-xl text-gray-200"></textarea>
+                </div>
+                <div>
+                    <label class="block text-gray-400 mb-1">Isi Surat Cinta Rahasia</label>
+                    <textarea id="edit-letter" rows="4" class="w-full p-2.5 bg-gray-900 border border-gray-700 rounded-xl text-gray-200"></textarea>
+                </div>
+            </div>
+
+            <!-- Export / Direct Download Option -->
+            <div class="p-4 bg-gray-900/80 border border-gray-800 rounded-2xl space-y-2">
+                <span class="text-amber-300 font-bold text-xs block">💾 Ingin Ekspor File HTML Baru?</span>
+                <p class="text-gray-400 text-[11px]">Klik tombol di bawah untuk mengunduh berkas <code>index.html</code> siap pakai untuk GitHub Pages!</p>
+                <button onclick="downloadHTMLFile()" class="w-full py-2 bg-gray-800 hover:bg-gray-700 text-amber-300 text-xs font-semibold rounded-xl border border-gray-700 transition">
+                    📥 Download File index.html Baru
+                </button>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button onclick="closeEditor()" class="w-1/2 py-2.5 bg-gray-800 text-gray-300 text-xs rounded-xl font-semibold">Batal</button>
+                <button onclick="saveData()" class="w-1/2 py-2.5 bg-amber-500 hover:bg-amber-400 text-gray-950 text-xs font-bold rounded-xl transition">Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
 
     <script>
+        // Default Image Dataset with fallback URLs
+        const defaultGallery = [
+            { id: 1, src: 'foto1.jpg', fallback: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600', caption: 'Senyum Indahmu ✨', cat: 'sweet' },
+            { id: 2, src: 'foto2.jpg', fallback: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=600', caption: 'Momen Bersama ❤️', cat: 'fav' },
+            { id: 3, src: 'foto3.jpg', fallback: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=600', caption: 'Jalan-Jalan Sore 🌅', cat: 'trip' },
+            { id: 4, src: 'foto4.jpg', fallback: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600', caption: 'Cantik Banget ✨', cat: 'sweet' },
+            { id: 5, src: 'foto5.jpg', fallback: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600', caption: 'Tertawa Bahagia 💖', cat: 'fav' },
+            { id: 6, src: 'foto6.jpg', fallback: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600', caption: 'Kencan di Kafe ☕', cat: 'trip' },
+            { id: 7, src: 'foto7.jpg', fallback: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600', caption: 'Tatapan Favorit 🥰', cat: 'sweet' },
+            { id: 8, src: 'foto8.jpg', fallback: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600', caption: 'Selamanya Bersama ✨', cat: 'fav' }
+        ];
+
+        const reasonsList = [
+            `"Senyumanmu selalu berhasil membuat hari yang berat terasa jauh lebih ringan." ✨`,
+            `"Kebaikan hatimu dan caramu memperlakukan orang lain dengan penuh rasa tulus." 🌷`,
+            `"Kenangan manis saat pertama kali kita mengobrol di Prolog Kopi tahun 2025." ☕`,
+            `"Suaramu yang selalu menjadi penenang di saat aku merasa lelah." 🎵`,
+            `"Caramu tertawa lepas hingga matamu menyipit manis." 🥰`,
+            `"Dukunganmu yang tak pernah henti untuk semua hal yang aku perjuangkan." 🚀`,
+            `"Karena bersamamu, aku merasa menjadi versi terbaik dari diriku." ❤️`
+        ];
+
+        const PIN_SECRET = "0210";
         let isCandleLit = true;
-        function toggleCandle() {
-            const flame = document.getElementById('candle-flame');
+        let uploadedPhotosArray = [];
+        let audioCtx = null;
+        let isBgmPlaying = false;
+
+        // Background Particles Canvas
+        function initParticles() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const particles = Array.from({ length: 45 }, () => ({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: Math.random() * 2.5 + 0.5,
+                speedY: -(Math.random() * 0.4 + 0.1),
+                opacity: Math.random() * 0.6 + 0.2
+            }));
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => {
+                    p.y += p.speedY;
+                    if (p.y < 0) p.y = height;
+                    ctx.fillStyle = `rgba(245, 158, 11, ${p.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // Web Audio Synthesized BGM Ambient
+        function toggleBGM() {
+            const btnText = document.getElementById('bgm-text');
+            const btnIcon = document.getElementById('bgm-icon');
+
+            if (!isBgmPlaying) {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                playAmbientChords();
+                isBgmPlaying = true;
+                btnText.innerText = "Musik Nyala 🎵";
+                btnIcon.innerText = "🔊";
+            } else {
+                if (audioCtx) audioCtx.suspend();
+                isBgmPlaying = false;
+                btnText.innerText = "Putar Musik";
+                btnIcon.innerText = "🎵";
+            }
+        }
+
+        function playAmbientChords() {
+            if (!audioCtx) return;
+            audioCtx.resume();
+            
+            const notes = [261.63, 329.63, 392.00, 493.88, 523.25]; // C major 7th ambient notes
+            let noteIdx = 0;
+
+            setInterval(() => {
+                if (!isBgmPlaying) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(notes[noteIdx % notes.length], audioCtx.currentTime);
+                
+                gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.08, audioCtx.currentTime + 1);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 4);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 4.2);
+
+                noteIdx++;
+            }, 2500);
+        }
+
+        // Cake Blowing Interaction & Confetti
+        function blowOutCandles() {
+            const flames = document.querySelectorAll('.candle-flame');
             const status = document.getElementById('cake-status');
-            if(isCandleLit) {
-                flame.style.opacity = '0';
-                flame.style.transform = 'scale(0)';
-                status.innerText = "🎉 Lilin tertiup! Selamat Ulang Tahun Maghfira! 🎉";
-                confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+
+            if (isCandleLit) {
+                flames.forEach(flame => {
+                    flame.style.opacity = '0';
+                    flame.style.transform = 'scale(0)';
+                });
+
+                status.innerText = "🎉 Lilin Tertiup! Semoga Semua Impian Maghfira Terwujud! 🎉";
+                status.classList.remove('animate-pulse');
+
+                // High Density Confetti Burst
+                confetti({
+                    particleCount: 150,
+                    spread: 100,
+                    origin: { y: 0.6 },
+                    colors: ['#fef08a', '#f59e0b', '#ef4444', '#ffffff']
+                });
+
                 isCandleLit = false;
             } else {
-                flame.style.opacity = '1';
-                flame.style.transform = 'scale(1)';
-                status.innerText = "Klik lilin di atas untuk meniupnya!";
+                flames.forEach(flame => {
+                    flame.style.opacity = '1';
+                    flame.style.transform = 'scale(1)';
+                });
+                status.innerText = "Klik kue / lilin di atas untuk meniup lilinnya! 🎂";
+                status.classList.add('animate-pulse');
                 isCandleLit = true;
             }
         }
+
+        // Render Gallery Grid
+        function renderGallery(filter = 'all') {
+            const container = document.getElementById('photo-gallery');
+            const savedPhotos = JSON.parse(localStorage.getItem('hbd_photos') || '[]');
+
+            container.innerHTML = "";
+
+            const rotations = ['-rotate-2', 'rotate-3', '-rotate-1', 'rotate-2', '-rotate-3', 'rotate-1', '-rotate-2', 'rotate-2'];
+
+            defaultGallery.forEach((item, index) => {
+                if (filter !== 'all' && item.cat !== filter) return;
+
+                const imgSrc = savedPhotos[index] || item.src;
+                const rot = rotations[index % rotations.length];
+
+                const cardHtml = `
+                    <div class="polaroid-card transform ${rot} rounded-lg" onclick="openLightbox('${imgSrc}', '${item.fallback}', '${item.caption}')">
+                        <div class="w-full h-52 bg-gray-900 rounded overflow-hidden mb-3 relative">
+                            <img src="${imgSrc}" 
+                                 onerror="this.onerror=null; this.src='${item.fallback}';" 
+                                 class="w-full h-full object-cover transition duration-500 hover:scale-110" 
+                                 alt="${item.caption}">
+                        </div>
+                        <p class="text-center text-gray-800 font-cursive text-2xl font-bold tracking-wide">${item.caption}</p>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+        }
+
+        function filterGallery(cat) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-amber-500', 'text-gray-950');
+                btn.classList.add('bg-gray-800', 'text-gray-300');
+            });
+            event.target.classList.remove('bg-gray-800', 'text-gray-300');
+            event.target.classList.add('bg-amber-500', 'text-gray-950');
+
+            renderGallery(cat);
+        }
+
+        // Lightbox Functions
+        function openLightbox(src, fallback, caption) {
+            const modal = document.getElementById('lightbox-modal');
+            const img = document.getElementById('lightbox-img');
+            const cap = document.getElementById('lightbox-caption');
+
+            img.src = src;
+            img.onerror = () => { img.src = fallback; };
+            cap.innerText = caption;
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox-modal').classList.add('hidden');
+        }
+
+        // 3D Envelope Interaction
+        function toggleEnvelope() {
+            const env = document.getElementById('envelope');
+            const letter = document.getElementById('letter-content');
+            const seal = document.getElementById('wax-seal');
+
+            env.classList.toggle('open');
+
+            if (env.classList.contains('open')) {
+                setTimeout(() => {
+                    seal.classList.add('hidden');
+                    letter.classList.remove('hidden');
+                }, 300);
+            } else {
+                letter.classList.add('hidden');
+                seal.classList.remove('hidden');
+            }
+        }
+
+        // Random Reason Generator
+        function generateRandomReason() {
+            const textEl = document.getElementById('reason-text');
+            const randomMsg = reasonsList[Math.floor(Math.random() * reasonsList.length)];
+            textEl.style.opacity = 0;
+            setTimeout(() => {
+                textEl.innerText = randomMsg;
+                textEl.style.opacity = 1;
+            }, 200);
+        }
+
+        // Password & Live Editor Logic
+        function openPasswordModal() {
+            document.getElementById('pwd-modal').classList.remove('hidden');
+        }
+        function closePasswordModal() {
+            document.getElementById('pwd-modal').classList.add('hidden');
+            document.getElementById('pwd-input').value = "";
+        }
+        function checkPassword() {
+            const input = document.getElementById('pwd-input').value;
+            if (input === PIN_SECRET) {
+                closePasswordModal();
+                openEditor();
+            } else {
+                alert("PIN Salah! Akses ditolak.");
+            }
+        }
+
+        function openEditor() {
+            document.getElementById('edit-title').value = document.getElementById('disp-title').innerText;
+            document.getElementById('edit-subtitle').value = document.getElementById('disp-subtitle').innerText;
+            document.getElementById('edit-story-1').value = document.getElementById('disp-story-1').innerText;
+            document.getElementById('edit-letter').value = document.getElementById('disp-letter').innerText;
+            document.getElementById('editor-modal').classList.remove('hidden');
+        }
+
+        function closeEditor() {
+            document.getElementById('editor-modal').classList.add('hidden');
+        }
+
+        // Handle Multiple File Upload
+        document.getElementById('multi-file-input').addEventListener('change', function(e) {
+            const files = e.target.files;
+            if (files.length > 0) {
+                uploadedPhotosArray = [];
+                let count = 0;
+                for (let i = 0; i < Math.min(files.length, 8); i++) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        uploadedPhotosArray.push(event.target.result);
+                        count++;
+                        if (count === Math.min(files.length, 8)) {
+                            alert(`${count} foto berhasil diunggah! Klik 'Simpan Perubahan' untuk mengaplikasikan.`);
+                        }
+                    };
+                    reader.readAsDataURL(files[i]);
+                }
+            }
+        });
+
+        function saveData() {
+            const title = document.getElementById('edit-title').value;
+            const subtitle = document.getElementById('edit-subtitle').value;
+            const story1 = document.getElementById('edit-story-1').value;
+            const letter = document.getElementById('edit-letter').value;
+
+            document.getElementById('disp-title').innerText = title;
+            document.getElementById('disp-subtitle').innerText = subtitle;
+            document.getElementById('disp-story-1').innerText = story1;
+            document.getElementById('disp-letter').innerText = letter;
+
+            localStorage.setItem('hbd_title', title);
+            localStorage.setItem('hbd_subtitle', subtitle);
+            localStorage.setItem('hbd_story1', story1);
+            localStorage.setItem('hbd_letter', letter);
+
+            if (uploadedPhotosArray.length > 0) {
+                localStorage.setItem('hbd_photos', JSON.stringify(uploadedPhotosArray));
+                renderGallery('all');
+            }
+
+            closeEditor();
+            alert("Semua perubahan berhasil disimpan!");
+        }
+
+        function loadSavedData() {
+            if (localStorage.getItem('hbd_title')) document.getElementById('disp-title').innerText = localStorage.getItem('hbd_title');
+            if (localStorage.getItem('hbd_subtitle')) document.getElementById('disp-subtitle').innerText = localStorage.getItem('hbd_subtitle');
+            if (localStorage.getItem('hbd_story1')) document.getElementById('disp-story-1').innerText = localStorage.getItem('hbd_story1');
+            if (localStorage.getItem('hbd_letter')) document.getElementById('disp-letter').innerText = localStorage.getItem('hbd_letter');
+            
+            renderGallery('all');
+        }
+
+        // Export Generated HTML File Function
+        function downloadHTMLFile() {
+            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'index.html';
+            a.click();
+        }
+
+        // On Page Load Initialization
+        window.onload = function() {
+            initParticles();
+            loadSavedData();
+        };
     </script>
 </body>
 </html>
